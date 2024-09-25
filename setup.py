@@ -11,7 +11,7 @@ setup(
     description="A Python library to enhance the efficiency and flexibility of Apache Airflow operators.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/yourusername/airops",
+    url="https://github.com/MuhammetAyan/airops",
     packages=find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
