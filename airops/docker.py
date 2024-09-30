@@ -192,7 +192,7 @@ class Docker:
             "command": command,
             **kwargs})
 
-    def run(self, docker_flags: List[str], image_name: str, app_args: List[str] = None, **kwargs):
+    def run(self, docker_flags: List[str], image_name: str, app_args: List[str] = None, return_command: bool = False, **kwargs):
         """
         Executes a `docker run` command with specified flags and image.
 
@@ -200,6 +200,7 @@ class Docker:
             docker_flags (List[str]): List of flags to pass to the `docker run` command.
             image_name (str): The name of the Docker image to run.
             app_args (List[str], optional): Additional arguments to pass to the container.
+            return_command (bool, optional): Whether to return the command instead of executing it. Defaults to False.
             **kwargs: Additional arguments for SSH execution.
         """
         app_args = app_args or list()
@@ -209,9 +210,12 @@ class Docker:
         login_command = self._login_command()
         if login_command:
             command = login_command + " && " + command
-        return self._ssh(command=command, **kwargs)
+        if return_command:
+            return command
+        else:
+            return self._ssh(command=command, **kwargs)
     
-    def build(self, image_name: str, docker_flags: List[str], project_path: str = ".", **kwargs):
+    def build(self, image_name: str, docker_flags: List[str], project_path: str = ".", return_command: bool = False, **kwargs):
         """
         Executes a `docker build` command with specified flags and image.
 
@@ -219,6 +223,7 @@ class Docker:
             image_name (str): The name of the Docker image to build.
             docker_flags (List[str]): List of flags to pass to the `docker build` command.
             project_path (str, optional): The path to the project directory. Defaults to ".".
+            return_command (bool, optional): Whether to return the command instead of executing it. Defaults to False.
             **kwargs: Additional arguments for SSH execution.
         """
         args = ["docker", "build", *docker_flags, "-t", image_name, project_path]
@@ -227,4 +232,7 @@ class Docker:
         login_command = self._login_command()
         if login_command:
             command = login_command + " && " + command
-        return self._ssh(command=command, **kwargs)
+        if return_command:
+            return command
+        else:
+            return self._ssh(command=command, **kwargs)
