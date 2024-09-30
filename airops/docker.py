@@ -20,7 +20,7 @@ Usage Example:
     )
 """
 
-from typing import Dict, List
+from typing import Dict, List, Union
 from airflow.providers.ssh.operators.ssh import SSHOperator
 import shlex
 
@@ -164,12 +164,12 @@ class Docker:
         self._username = username
         self._password = password
     
-    def _login_command(self) -> str | None:
+    def _login_command(self) -> Union[str, None]:
         """
         Constructs the `docker login` command based on the provided credentials.
 
         Returns:
-            str | None: The login command string if credentials are provided, otherwise None.
+            Union[str, None]: The login command string if credentials are provided, otherwise None.
         """
         if self._username and self._password:
             args = ["docker", "login", "-u", self._username, "-p", self._password]
