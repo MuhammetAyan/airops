@@ -204,7 +204,11 @@ class Docker:
             **kwargs: Additional arguments for SSH execution.
         """
         app_args = app_args or list()
-        args = ["docker", "run", *docker_flags, image_name, *app_args]
+        docker_flags = docker_flags or list()
+        flatten_flags = []
+        for f in docker_flags:
+            flatten_flags.extend(f)
+        args = ["docker", "run", *flatten_flags, image_name, *app_args]
         safe_args = [shlex.quote(arg) for arg in args]
         command = " ".join(safe_args)
         login_command = self._login_command()
@@ -226,7 +230,11 @@ class Docker:
             return_command (bool, optional): Whether to return the command instead of executing it. Defaults to False.
             **kwargs: Additional arguments for SSH execution.
         """
-        args = ["docker", "build", *docker_flags, "-t", image_name, project_path]
+        docker_flags = docker_flags or list()
+        flatten_flags = []
+        for f in docker_flags:
+            flatten_flags.extend(f)
+        args = ["docker", "build", *flatten_flags, "-t", image_name, project_path]
         safe_args = [shlex.quote(arg) for arg in args]
         command = " ".join(safe_args)
         login_command = self._login_command()

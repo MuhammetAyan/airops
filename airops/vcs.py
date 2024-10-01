@@ -53,7 +53,11 @@ class Git:
             **kwargs})
     
     def clone(self, repository_url: str, directory: str=".", flags: List[GitCloneFlag] = None, return_command: bool = False, **kwargs) -> None:
-        args = ["git", "clone", *flags, repository_url, directory]
+        flags = flags or list()
+        flatten_flags = []
+        for f in flags:
+            flatten_flags.extend(f)
+        args = ["git", "clone", *flatten_flags, repository_url, directory]
         safe_args = [shlex.quote(arg) for arg in args]
         command = " ".join(safe_args)
         if return_command:
